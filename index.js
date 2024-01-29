@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+app.use(express.json())
 
 let persons = [
   {
@@ -48,6 +49,18 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end()
 })
 
+app.post('/api/persons', (request, response) => {
+  const person = {
+    id: generateId(),
+    name: request.body.name,
+    number: request.body.number,
+  }
+
+  persons = persons.concat(person)
+
+  response.json(person)
+})
+
 app.get('/info', (request, response) => {
   response.send(`
     <p>Phonebook has info for ${persons.length} people</p>
@@ -59,3 +72,8 @@ const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
+const generateId = () => {
+  const maxId = persons.length > 0 ? Math.max(...persons.map((n) => n.id)) : 0
+  return maxId + 1
+}
