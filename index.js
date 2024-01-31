@@ -66,6 +66,14 @@ app.post('/api/persons', (request, response) => {
   })
 })
 
+app.put('/api/persons/:id', (request, response) => {
+  Person.findByIdAndUpdate(request.params.id, request.body)
+    .then((result) => {
+      response.json(request.body)
+    })
+    .catch((error) => next(error))
+})
+
 app.get('/info', (request, response) => {
   response.send(`
     <p>Phonebook has info for ${persons.length} people</p>
