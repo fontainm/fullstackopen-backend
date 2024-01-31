@@ -92,18 +92,29 @@ const App = () => {
       number: newNumber,
     }
 
-    personService.create(newPerson).then((response) => {
-      setPersons(persons.concat(response.data))
-      setNewName('')
-      setNewNumber('')
-      setNotification({
-        message: `Added ${response.data.name}`,
-        type: 'success',
+    personService
+      .create(newPerson)
+      .then((response) => {
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+        setNotification({
+          message: `Added ${response.data.name}`,
+          type: 'success',
+        })
+        setTimeout(() => {
+          setNotification(null)
+        }, 3000)
       })
-      setTimeout(() => {
-        setNotification(null)
-      }, 3000)
-    })
+      .catch((error) => {
+        setNotification({
+          message: error.response.data.error,
+          type: 'error',
+        })
+        setTimeout(() => {
+          setNotification(null)
+        }, 3000)
+      })
   }
 
   const handleNameChange = (event) => {
