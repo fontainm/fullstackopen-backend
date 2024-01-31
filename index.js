@@ -74,11 +74,15 @@ app.put('/api/persons/:id', (request, response) => {
     .catch((error) => next(error))
 })
 
-app.get('/info', (request, response) => {
-  response.send(`
-    <p>Phonebook has info for ${persons.length} people</p>
-    <p>${new Date()}</p>
-  `)
+app.get('/api/info', (request, response) => {
+  Person.countDocuments({})
+    .then((result) => {
+      response.send(`
+        <p>Phonebook has info for ${result} people</p>
+        <p>${new Date()}</p>
+      `)
+    })
+    .catch((error) => next(error))
 })
 
 const errorHandler = (error, request, response, next) => {
